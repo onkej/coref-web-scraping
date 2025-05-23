@@ -70,7 +70,7 @@ The API entry can be found in Dev Tools' **Network**: `https://m.ctrip.com/resta
 Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for request.
 
 **Request** (Mobile)  
-```
+```json
 {
 	"arg": {
 		"channelType": 7,
@@ -120,7 +120,7 @@ Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for req
 ```
 
 **Response** (Mobile, first comment)  
-```
+```json
 {
 	"0": {
 		"commentId": 207779349,
@@ -316,7 +316,7 @@ Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for req
 <!-- ![CEnews: Dev Tools - Network - XHR](./img/cenews-1.png) -->
 
 - **Request**
-```
+```json
 {
 	"keyWord": "生态文明",
 	"searchLocation": "0",
@@ -341,7 +341,7 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
 ![CEnews - Request](./img/cenews-2.png)
 
 - **Response** (first article)
-```
+```json
 {
 	"0": {
 		"fileID": 1354001,
@@ -384,7 +384,7 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
 ### people.cn 人民网
 
 - **Request**
-```
+```json
 {
 	"endTime": 0,
 	"hasContent": true,
@@ -401,7 +401,7 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
   ![People.cn - request](./img/people-requ.png)
 
 - **Response** (first article)
-```
+```json
 {
 	"0": {
 		"author": "姚禹",
@@ -481,8 +481,7 @@ Refer:          g (not sure what it means)
 
 #### mee.gov.cn 生态环境部
 
-![MEE - Response](./img/mee-resp.png)
-
+**Request**
 ```
 https://www.mee.gov.cn/was5/web/search?channelid=270514&searchword=&page=1&orderby=-docreltime&searchscope=&timestart=2008.01.01&timeend=2025.05.21&period=&chnls=11&andsen=&total=生态文明&orsen=&exclude=
 
@@ -501,12 +500,34 @@ orsen:
 exclude:    
 ```
 
+**Response (first article)**
+```html
+<li class="li"> 
+	<a href="http://www.mee.gov.cn/ywdt/hjywnews/202505/t20250522_1119950.shtml" target="_blank">
+		<h2 class="h2">
+			<em class="fl ll_gjjs_list_title">要闻动态</em>
+			2025年国际生物多样性日宣传活动在黑龙江省伊春市举行
+		</h2>
+	</a>
+	<span class="span">2025-05-22</span>									
+	<p class="p">
+		2025年5月22日，国际生物多样性日宣传活动在黑龙江省伊春市举行。今年国际生物多样性日主题是“万物共生 和美永续”（Harmony with Nature and Sustainable Development）。生态环境部副部长于会文，黑龙江省副省长余建出席活动并致辞。
+生物多样性是人类福祉和经济繁荣的基础。在习近平<font color="red">生态文明</font>思想指引下，中国坚定走生态优先、绿色发展之路，着力完善生物多样性保护空间格局、强化生物多样性监督管理、织密生物多样性保护制度网，生物多样性保护水平稳步提升。中国积极引领全球生物多样性治理进程，设立并运行昆明生物多样性基金，加强与“一带一路”共建国家生物多样性合作，为“昆明—蒙特利尔全球生物多样性框架”的达成与落实作出历史性贡献。下一步，生态环境部将持续推动各项战略目标落地，为美丽中国建设和构建清洁美丽世界贡献力量。
+黑 
+  																
+
+	</p>
+</li>
+```
+
 
 
 ### Query String without `?`
 Another way is more obscure and, at least in Chinese context, more arbitrary.
 
 #### anjuke.com 安居客
+
+**Request**
 ```
 https://zh.zu.anjuke.com/fangyuan/gaoxinququ-q-tangjiawan/zj204-fx1-x1-tw2-tj1-dtf1-lx1/
 
@@ -523,4 +544,50 @@ dtf1:       电梯房 = True
 lx1:        房屋类型 = 普通住宅 (1st place)
 ```
 
+**Response**
+```html
+<div class="zu-itemmod clearfix" link="https://zh.zu.anjuke.com/fangyuan/4060272328515599?isauction=1&amp;shangquan_id=12878&amp;psid=3d496bf21f2707e5329153eac1f381fb" _soj="Filter_1" judge_visible="" fortrack-data="exposure_list" clicklog="click_list" ep-log="{&quot;cate1&quot;:&quot;1&quot;,&quot;cate2&quot;:&quot;8&quot;,&quot;a&quot;:&quot;1&quot;,&quot;cityid1_58&quot;:910,&quot;GTID&quot;:&quot;3d496bf21f2707e5329153eac1f381fb&quot;,&quot;page&quot;:&quot;1&quot;,&quot;list_keywords&quot;:{&quot;search&quot;:&quot;&quot;,&quot;filter&quot;:{&quot;zujin&quot;:&quot;1000_1500&quot;,&quot;chaoxiang&quot;:&quot;2&quot;,&quot;huxing&quot;:&quot;1&quot;,&quot;quyu&quot;:{&quot;shangquan&quot;:&quot;12878&quot;,&quot;xingzhengqu&quot;:&quot;18394&quot;}}},&quot;infoid&quot;:&quot;4060272328515599&quot;,&quot;houseid&quot;:&quot;4060272328515599&quot;,&quot;is_biz&quot;:true,&quot;slot&quot;:&quot;ajk_rent_pc_list_left&quot;,&quot;sid&quot;:&quot;3d496bf21f2707e5329153eac1f381fb&quot;,&quot;ad_type&quot;:&quot;j&quot;,&quot;is_business&quot;:0,&quot;pos&quot;:1,&quot;gpos&quot;:1,&quot;shidiheyanzhuangtai&quot;:&quot;1&quot;,&quot;qingheyanzhuangtai&quot;:&quot;&quot;,&quot;nameoflist&quot;:10,&quot;recomshowlog&quot;:&quot;&quot;,&quot;tid&quot;:&quot;&quot;,&quot;is_down&quot;:&quot;0&quot;,&quot;is_up&quot;:&quot;4&quot;,&quot;info_type&quot;:6}" data-visibled="true">
+	<a data-company="" class="img" _soj="Filter_1" data-sign="true" href="https://zh.zu.anjuke.com/fangyuan/4060272328515599?isauction=1&amp;shangquan_id=12878&amp;psid=3d496bf21f2707e5329153eac1f381fb" target="_blank" hidefocus="true">
+		<img alt="珠海高新区-唐家湾珠海北站舒适一房复式拎包住生活便利出租房源真实图片" class="thumbnail" lazy_src="https://pic1.ajkimg.com/display/anjuke/36dfbd148dce94228c6e04b49e991cc8/240x180c.jpg?t=1&amp;srotate=1" src="https://pic1.ajkimg.com/display/anjuke/36dfbd148dce94228c6e04b49e991cc8/240x180c.jpg?t=1&amp;srotate=1" width="180" height="135" data-loaded="true">
+		<span class="many-icons iconfont"></span>                    
+	</a>
+	<div class="zu-info">
+		<h3>
+			<a target="_blank" _soj="Filter_1" href="https://zh.zu.anjuke.com/fangyuan/4060272328515599?isauction=1&amp;shangquan_id=12878&amp;psid=3d496bf21f2707e5329153eac1f381fb">
+				<b class="strongbox">珠海北站舒适一房复式拎包住生活便利</b>
+			</a>
+			<em class="anxvan-ico">安选</em>                    
+        </h3>
+		<p class="details-item tag">
+			<b class="strongbox" style="font-weight: normal;">1</b>
+			室
+			<b class="strongbox" style="font-weight: normal;">1</b>
+			厅
+			<span>|</span>
+			<b class="strongbox" style="font-weight: normal;">38.1</b>平米
+			<span>|</span> 低层(共17层)                                                    
+		</p>
+        <address class="details-item tag">
+            <a target="_blank" href="https://zh.anjuke.com/community/view/1315204">
+				首开龙湖天钜(商住楼)
+			</a>&nbsp;&nbsp;
+            高新区<span class="horiz-line">-</span>唐家湾 <span class="horiz-line">-</span>科创纵三路                        
+		</address>
+        <p class="details-item bot-tag">
+            <span class="cls-common">整租</span>
+            <span class="cls-common">朝南</span>
+            <span class="cls-common">有电梯</span>
+		</p>
+    	<p class="detail-jjr">
+            <i class="iconfont jjr-icon"></i>
+            <span class="jjr-info">刘翠兰</span>
+            <!-- 活跃经纪人 -->
+        </p>
+    </div>
+    <div class="zu-side">
+        <strong class="price">1500</strong>
+        <span class="unit">元/月</span>
+    </div>
+</div>
+```
 
