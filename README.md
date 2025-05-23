@@ -3,21 +3,23 @@ Website Types and Scraping Approaches
 
 **Table of Contents**
 - [Website Types and Scraping Approaches](#website-types-and-scraping-approaches)
-  - [How to Know Which Approach to Use? (Answered by Claude 3.7 Sonnet)](#how-to-know-which-approach-to-use-answered-by-claude-37-sonnet)
-  - [JSON-based Parsing](#json-based-parsing)
-    - [(m.)ctrip.com 携程](#mctripcom-携程)
-    - [cenews.com.cn 中国环境](#cenewscomcn-中国环境)
-    - [people.cn 人民网](#peoplecn-人民网)
-  - [URL-based Parsing](#url-based-parsing)
-    - [Query String with `?`](#query-string-with-)
-      - [weibo.com 微博](#weibocom-微博)
-      - [mee.gov.cn 生态环境部](#meegovcn-生态环境部)
-    - [Query String without `?`](#query-string-without-)
-      - [anjuke.com 安居客](#anjukecom-安居客)
+	- [How to Know Which Approach to Use?](#how-to-know-which-approach-to-use)
+	- [JSON-based Parsing](#json-based-parsing)
+		- [ctrip.com 携程](#ctripcom-携程)
+		- [cenews.com.cn 中国环境](#cenewscomcn-中国环境)
+		- [people.cn 人民网](#peoplecn-人民网)
+	- [URL-based Parsing](#url-based-parsing)
+		- [Query String with `?`](#query-string-with-)
+			- [weibo.com 微博](#weibocom-微博)
+			- [mee.gov.cn 生态环境部](#meegovcn-生态环境部)
+		- [Query String without `?`](#query-string-without-)
+			- [anjuke.com 安居客](#anjukecom-安居客)
 
 Websites use different content loading mecanisms. Accordingly, there're two types of scraping methods: JSON-based vs. URL-based.
 
-## How to Know Which Approach to Use? (Answered by Claude 3.7 Sonnet)
+## How to Know Which Approach to Use? 
+(Answered by Claude 3.7 Sonnet)
+
 1. Inspect Network Requests
      - Open browser Dev Tools using ``Fn + F12``, go to the `Network` tab
      - On the website, perform a request by applying a filter or navigate to next page
@@ -32,7 +34,6 @@ Websites use different content loading mecanisms. Accordingly, there're two type
       
      - If you only see HTML documents, use the URL-based parsing
        - See [examples below](#url-based-parsing)
-     
 
 3. Test a Simple Request
      - Try accessing a suspected API endpoint directly
@@ -47,10 +48,24 @@ Since JSON is already structured data that can be directly processed without HTM
 APIs often provide more complete and consistent data than what's visible on the webpage
 
 
-### (m.)ctrip.com 携程
-Ctrip provides both mobile and PC pages, which apply different loading mecanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. Both can be scraped using API requests, but I guess the mobile one allows to load more comments than the PC one (up to `10 comments/page * 300 pages = 3000 comments`).
+### ctrip.com 携程
+Ctrip provides both mobile and PC pages, which apply different loading mecanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. 
 
-The API entry can be found in Dev Tool's **Network**: `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList?_fxpcqlniredt=09031109310692966540&x-traceID=09031109310692966540-1747919168810-7858839`. 
+**For 武夷山**
+
+- Mobile
+  ````
+  https://m.ctrip.com/webapp/you/commentWeb/commentList?businessId=126481&businessType=sight
+  ````
+
+- PC
+  ````
+  https://you.ctrip.com/sight/wuyishan22/126481.html
+  ````
+
+Both can be scraped using API requests, but I guess the mobile one allows to load more comments than the PC one that apparently shows only up to `10 * 300 = 3000` comments.
+
+The API entry can be found in Dev Tools' **Network**: `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList?_fxpcqlniredt=09031109310692966540&x-traceID=09031109310692966540-1747919168810-7858839`. 
 
 Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for request.
 
@@ -296,12 +311,11 @@ Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for req
 }
 ```
 
-### cenews.com.cn 中国环境
-![CEnews: Dev Tools - Network - XHR](./img/cenews-1.png)
-![CEnews: Dev Tools - Network - XHR - Request](./img/cenews-2.png)
-![CEnews: Dev Tools - Network - XHR - Response](./img/cenews-3.png)
 
-**Request**
+### cenews.com.cn 中国环境
+<!-- ![CEnews: Dev Tools - Network - XHR](./img/cenews-1.png) -->
+
+- **Request**
 ```
 {
 	"keyWord": "生态文明",
@@ -320,12 +334,13 @@ Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for req
 }
 ```
 
-Raw:
+  Raw:
 ```
 keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&beginTime=2007-01-01%2000%3A00%3A00&endTime=2025-05-22%2023%3A59%3A59&orderType=1&pageNumber=1&pageSize=20&columnID=-1&subSiteID=1&siteID=-1&includeSubNode=1&total=39824
 ```
+![CEnews - Request](./img/cenews-2.png)
 
-**Response** (first article)
+- **Response** (first article)
 ```
 {
 	"0": {
@@ -363,9 +378,12 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
 	}
 }
 ```
+![CEnews - Response](./img/cenews-3.png)
+
 
 ### people.cn 人民网
-**Request**
+
+- **Request**
 ```
 {
 	"endTime": 0,
@@ -380,8 +398,9 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
 	"type": 1
 }
 ```
+  ![People.cn - request](./img/people-requ.png)
 
-**Response** (first article)
+- **Response** (first article)
 ```
 {
 	"0": {
@@ -423,7 +442,7 @@ keyWord=%E7%94%9F%E6%80%81%E6%96%87%E6%98%8E&searchLocation=0&searchType=0&begin
 	}
 }
 ```
-
+  ![People.cn - response](./img/people-resp.png)
 
 ## URL-based Parsing
 This approach is used on traditional websites, where pagination and filter applications will be marked somewhere in the URL in some way.
@@ -432,22 +451,28 @@ This approach is used on traditional websites, where pagination and filter appli
 A typical and comprehensible way is using
 **query string** with `?`, followed by optional `key=value` pairs (filters).  
 
-For some, like [**Weibo**](#weibo-微博), the queried URL could be the same as the one shown in browser's search bar. 
+For some, like [**Weibo**](#weibocom-微博), the queried URL could be the same as the one shown in browser's search bar. 
 
-But for others, e.g. [**MEE**](#mee-生态环境部), the queries URL could be hidden in the **Network** details in Dev Tool.
+But for others, e.g. [**MEE**](#meegovcn-生态环境部), the queries URL could be hidden in the **Network** details in Dev Tools.
 
 #### weibo.com 微博 
 
-`https://s.weibo.com/weibo?q=生态文明&scope=ori&haspic=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g`
+![Weibo Advanced Search](./img/weibo.png)
+```
+# 关键词+原创+含图片+设定日期范围
+https://s.weibo.com/weibo?q=生态文明&scope=ori&haspic=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g
 
-`https://s.weibo.com/weibo?q=生态文明&typeall=1&haspic=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g`
+# 关键词+全部+含图片+设定日期范围
+https://s.weibo.com/weibo?q=生态文明&typeall=1&haspic=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g
 
-`https://s.weibo.com/weibo?q=#生态文明#&haspic=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g`
+# 话题+全部+全部+设定日期范围
+https://s.weibo.com/weibo?q=#生态文明#&typeall=1&suball=1&timescope=custom:2025-05-01-0:2025-05-21-0&Refer=g
+```
 
 ```
 q:              生态文明
-typeall:        1 (type=all, default)
-scope:          ori (type=original 原创)
+typeall:        1 (default)
+scope:          ori (original 原创)
 haspic:         1 (has picture=True)
 timescope:      custom:2025-05-01-0:2025-05-21-0
 Refer:          g (not sure what it means)
@@ -456,11 +481,11 @@ Refer:          g (not sure what it means)
 
 #### mee.gov.cn 生态环境部
 
-![MEE: Dev Tools - Network - XHR - Response](./img/mee-resp.png)
-
-`https://www.mee.gov.cn/was5/web/search?channelid=270514&searchword=&page=1&orderby=-docreltime&searchscope=&timestart=2008.01.01&timeend=2025.05.21&period=&chnls=11&andsen=&total=生态文明&orsen=&exclude=`
+![MEE - Response](./img/mee-resp.png)
 
 ```
+https://www.mee.gov.cn/was5/web/search?channelid=270514&searchword=&page=1&orderby=-docreltime&searchscope=&timestart=2008.01.01&timeend=2025.05.21&period=&chnls=11&andsen=&total=生态文明&orsen=&exclude=
+
 channelid:      270514
 searchword:	
 page:           1
@@ -482,9 +507,9 @@ exclude:
 Another way is more obscure and, at least in Chinese context, more arbitrary.
 
 #### anjuke.com 安居客
-`https://zh.zu.anjuke.com/fangyuan/gaoxinququ-q-tangjiawan/zj204-fx1-x1-tw2-tj1-dtf1-lx1/`
-
 ```
+https://zh.zu.anjuke.com/fangyuan/gaoxinququ-q-tangjiawan/zj204-fx1-x1-tw2-tj1-dtf1-lx1/
+
 zh:         珠海
 zu:         租 (apartments for rental)
 gaoxinququ: 区 = 高新区
