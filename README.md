@@ -49,9 +49,9 @@ APIs often provide more complete and consistent data than what's visible on the 
 
 
 ### ctrip.com 携程
-Ctrip provides both mobile and PC pages, which apply different loading mecanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. 
+Ctrip provides both mobile and PC pages, which apparently apply different loading mecanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. 
 
-**For 武夷山**
+**For 武夷山 we have:**
 
 - Mobile
   ````
@@ -63,21 +63,22 @@ Ctrip provides both mobile and PC pages, which apply different loading mecanism:
   https://you.ctrip.com/sight/wuyishan22/126481.html
   ````
 
-Both can be scraped using API requests, but I guess the mobile one allows to load more comments than the PC one that apparently shows only up to `10 * 300 = 3000` comments.
+**Both rely on the same API request:**
+```
+https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList
+```
 
-The API entry can be found in Dev Tools' **Network**: `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList?_fxpcqlniredt=09031109310692966540&x-traceID=09031109310692966540-1747919168810-7858839`. 
+But their total page counts seem to be slightly different, with 6265 ``totalCount`` + 798 ``totalCollapseCount`` on mobile side, and 7030 ``totalCount`` + 0 ``totalCollapseCount`` on PC side. **So I'm actually not sure about what ``totalCollapseCount`` stands for and how we can know which side provides more scrapable comments.** 
 
-Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for request.
-
-**Request** (Mobile)  
+**Request**
 ```json
 {
 	"arg": {
 		"channelType": 7,
 		"collapseType": 1,
 		"commentTagId": 0,
-		"pageIndex": 2,
-		"pageSize": 10,
+		"pageIndex": 2,			<-- is requesting page 2 
+		"pageSize": 10,			<-- 10 comments in this page
 		"pageType": 1,
 		"poiId": null,
 		"resourceId": 126481,
@@ -119,7 +120,7 @@ Use `https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList` for req
 }
 ```
 
-**Response** (Mobile, first comment)  
+**Response**  
 ```json
 {
 	"0": {
