@@ -5,6 +5,7 @@ Website Types and Scraping Approaches
 - [Website Types and Scraping Approaches](#website-types-and-scraping-approaches)
 	- [How to Know Which Approach to Use?](#how-to-know-which-approach-to-use)
 	- [JSON-based Parsing](#json-based-parsing)
+		- [Xiaohongshu (RedNote) 小红书](#xiaohongshu-rednote-小红书)
 		- [ctrip.com 携程](#ctripcom-携程)
 		- [cenews.com.cn 中国环境](#cenewscomcn-中国环境)
 		- [people.cn 人民网](#peoplecn-人民网)
@@ -15,7 +16,7 @@ Website Types and Scraping Approaches
 		- [Query String without `?`](#query-string-without-)
 			- [anjuke.com 安居客](#anjukecom-安居客)
 
-Websites use different content loading mecanisms. Accordingly, there're two types of scraping methods: JSON-based vs. URL-based.
+Websites use different content loading mechanisms. Accordingly, there're two types of scraping methods: JSON-based vs. URL-based.
 
 ## How to Know Which Approach to Use? 
 (Answered by Claude 3.7 Sonnet)
@@ -47,18 +48,149 @@ Since JSON is already structured data that can be directly processed without HTM
 
 APIs often provide more complete and consistent data than what's visible on the webpage
 
+### Xiaohongshu (RedNote) 小红书
+
+It's **less efficient** to scrape Xiaohongshu data. In addition to json-based parsing, we also need **cookies** (user login information) to mimic a real user behavior. 
+
+**Scraping by Keyword Search**  
+Number of pages: 11  
+Number of posts per page: from 20 to 22 (apparently)
+
+There're usually **no more than 220 results** for **one keyword with one filter set**.
+
+* Request (File: ``notes``)
+```json
+{
+	"ext_flags": [],
+	"filters": [
+		{
+			"tags": [
+				"general"
+			],
+			"type": "sort_type"
+		},
+		{
+			"tags": [
+				"不限"
+			],
+			"type": "filter_note_type"
+		},
+		{
+			"tags": [
+				"不限"
+			],
+			"type": "filter_note_time"
+		},
+		{
+			"tags": [
+				"不限"
+			],
+			"type": "filter_note_range"
+		},
+		{
+			"tags": [
+				"不限"
+			],
+			"type": "filter_pos_distance"
+		}
+	],
+	"geo": "",
+	"image_formats": [
+		"jpg",
+		"webp",
+		"avif"
+	],
+	"keyword": "五指山",
+	"note_type": 0,
+	"page": 2,
+	"page_size": 20,
+	"search_id": "2ewlcbhik8byh0rayry08",
+	"sort": "general"
+}
+
+```
+
+* Response (first note)
+
+```json
+{
+	"code": 0,
+	"success": true,
+	"msg": "成功",
+	"data": {
+		"has_more": true,
+		"items": [
+			{
+				"id": "66618d2a000000000d00f09f",
+				"model_type": "note",
+				"note_card": {
+					"type": "normal",
+					"display_title": "不是亚马逊去不起，海南更有性价比｜五指山",
+					"user": {
+						"nick_name": "银河迷路员",
+						"avatar": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo30s0p00t72g0g5nqvv8s09d2qrnl88jg?imageView2/2/w/80/format/jpg",
+						"user_id": "5f5ffa38000000000100b45a",
+						"nickname": "银河迷路员",
+						"xsec_token": "ABpMGBfWi_EaKSliVx4rDdRVsxFFZ3bcdOuQ8x8LYf5ic="
+					},
+					"interact_info": {
+						"collected_count": "1207",
+						"comment_count": "84",
+						"shared_count": "845",
+						"liked": false,
+						"liked_count": "864",
+						"collected": false
+					},
+					"cover": {
+						"url_default": "http://sns-webpic-qc.xhscdn.com/202506080754/e4a01d1f42bf7b8efc2dac7e183152fa/1040g008313o2bm6khk305nqvv8s09d2qr68fnko!nc_n_webp_mw_1",
+						"url_pre": "http://sns-webpic-qc.xhscdn.com/202506080754/eba0b1f5adaae1a88cc6e2ce60212236/1040g008313o2bm6khk305nqvv8s09d2qr68fnko!nc_n_webp_prv_1",
+						"height": 2560,
+						"width": 1920
+					},
+					"image_list": [
+						{
+							"height": 2560,
+							"width": 1920,
+							"info_list": [
+								{
+									"image_scene": "WB_DFT",
+									"url": "http://sns-webpic-qc.xhscdn.com/202506080754/e4a01d1f42bf7b8efc2dac7e183152fa/1040g008313o2bm6khk305nqvv8s09d2qr68fnko!nc_n_webp_mw_1"
+								},
+								{
+									"image_scene": "WB_PRV",
+									"url": "http://sns-webpic-qc.xhscdn.com/202506080754/eba0b1f5adaae1a88cc6e2ce60212236/1040g008313o2bm6khk305nqvv8s09d2qr68fnko!nc_n_webp_prv_1"
+								}
+							]
+						},
+						// other images
+					],
+					"corner_tag_info": [
+						{
+							"type": "publish_time",
+							"text": "2024-06-07"
+						}
+					]
+				},
+				"xsec_token": "ABvaHiSBZrg8HPo7kh4REmBJDXGXJT28ibLDO8YF0TqjQ="
+			},
+			// other notes
+		]
+	}
+}
+```
+
 
 ### ctrip.com 携程
-Ctrip provides both mobile and PC pages, which apparently apply different loading mecanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. 
+Ctrip provides both mobile and PC pages, which apparently apply different loading mechanism: ***infinite scrolling*** on mobile version, and ***pagination without URL changes*** on PC version. 
 
-**For 武夷山 we have:**
+**For 武夷山 we notice there're 11633 comments (up to 2025.06.08)**
 
-- Mobile
+- Mobile URL
   ````
   https://m.ctrip.com/webapp/you/commentWeb/commentList?businessId=126481&businessType=sight
   ````
 
-- PC
+- PC URL
   ````
   https://you.ctrip.com/sight/wuyishan22/126481.html
   ````
@@ -68,7 +200,11 @@ Ctrip provides both mobile and PC pages, which apparently apply different loadin
 https://m.ctrip.com/restapi/soa2/13444/json/getCommentCollapseList
 ```
 
-But their total page counts seem to be slightly different, with 6265 ``totalCount`` + 798 ``totalCollapseCount`` on mobile side, and 7030 ``totalCount`` + 0 ``totalCollapseCount`` on PC side. **So I'm actually not sure about what ``totalCollapseCount`` stands for and how we can know which side provides more scrapable comments.** 
+However, **under the default filter set**, we can only scrape **a maximum of 3010 comments (10 comments per page with about a total of 301 pages at most)**. So, in order to get more comments, we can consider applying other filter sets by changing the corresponding parameters in request json (e.g. `sortType=1` means time descending order, which helps getting more latest comments rather than default popularity-descending-ordered comments).
+
+<!-- But their total page counts seem to be slightly different, with 6265 ``totalCount`` + 798 ``totalCollapseCount`` on mobile side, and 7030 ``totalCount`` + 0 ``totalCollapseCount`` on PC side. **So I'm actually not sure about what ``totalCollapseCount`` stands for and how we can know which side provides more scrapable comments.**  -->
+
+
 
 **Request**
 ```json
@@ -77,8 +213,8 @@ But their total page counts seem to be slightly different, with 6265 ``totalCoun
 		"channelType": 7,
 		"collapseType": 1,
 		"commentTagId": 0,
-		"pageIndex": 2,			<-- is requesting page 2 
-		"pageSize": 10,			<-- 10 comments in this page
+		"pageIndex": 2,			// is requesting page 2 
+		"pageSize": 10,			// 10 comments in this page
 		"pageType": 1,
 		"poiId": null,
 		"resourceId": 126481,
@@ -454,7 +590,7 @@ A typical and comprehensible way is using
 
 For some, like [**Weibo**](#weibocom-微博), the queried URL could be the same as the one shown in browser's search bar. 
 
-But for others, e.g. [**MEE**](#meegovcn-生态环境部), the queries URL could be hidden in the **Network** details in Dev Tools.
+But for others, e.g. [**MEE**](#meegovcn-生态环境部), the queried URL could be hidden in the **Network** details in Dev Tools.
 
 #### weibo.com 微博 
 
@@ -524,7 +660,7 @@ exclude:
 
 
 ### Query String without `?`
-Another way is more obscure and, at least in Chinese context, more arbitrary.
+Another way to mark query information seems more arbitrary and unpredictable. Components can be acronyms, numerical indexes, or their mix.
 
 #### anjuke.com 安居客
 
@@ -591,4 +727,10 @@ lx1:        房屋类型 = 普通住宅 (1st place)
     </div>
 </div>
 ```
+
+
+<!-- ## Social Media Platforms
+
+Handling app-based social media platforms is far more complicated than scraping account-free web-based sites. It is therefore predictable that obtaining user-generated contents from platforms such as Xiaohongshu 小紅書 or Weibo 微博 requires extra efforts and will be less efficient. -->
+
 
